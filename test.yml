@@ -36,7 +36,39 @@
       - name: Display Ansible version output
         debug:
             var: ansible_version.stdout_lines
-            
+
+- name: Collect host details
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Collect system information
+      command: "uname -a"
+      register: system_info
+    - name: Collect CPU information
+      command: "lscpu"
+      register: cpu_info
+    - name: Collect memory information
+      command: "free -m"
+      register: memory_info
+    - name: Collect disk information
+      command: "df -h"
+      register: disk_info
+    - name: Print host information
+      debug:
+        var: hostvars[inventory_hostname]
+    - name: Print system information
+      debug:
+        var: system_info
+    - name: Print CPU information
+      debug:
+        var: cpu_info
+    - name: Print memory information
+      debug:
+        var: memory_info
+    - name: Print disk information
+      debug:
+        var: disk_info
+        
 - name: Show network details
   hosts: all
   gather_facts: no
